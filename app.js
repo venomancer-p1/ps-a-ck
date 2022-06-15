@@ -14,7 +14,7 @@ var port = process.env.PORT || 8000;
 
 //
 
-
+/*
 const start = require('./proxy-scraper.js');
 var ALL_ALIVE = [];
 var timeout;
@@ -30,7 +30,7 @@ async function update() {
     }
     timeout = setTimeout(update, Math.max(0, 1000 - new Date + t1));
 }
-update();
+update();*/
 
 
 //setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
