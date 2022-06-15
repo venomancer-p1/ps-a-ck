@@ -17,18 +17,23 @@ var port = process.env.PORT || 8000;
 
 const start = require('./proxy-scraper.js');
 var ALL_ALIVE = [];
-/*var timeout;
+var timeout;
 async function update() {
-  if (timeout) clearTimeout(timeout);
-  const t1 = new Date();
-  await start(ALL_ALIVE)
-  await delay(300000)
-  timeout = setTimeout(update, Math.max(0, 1000 - new Date + t1));
+    if (timeout) clearTimeout(timeout);
+    const t1 = new Date();
+
+    await start(ALL_ALIVE);
+
+    if (ALL_ALIVE.length > 0) {
+        console.log(`[MAIN] I'm Tired, I'll take 5 min of break`);
+        await delay(300000)
+    }
+    timeout = setTimeout(update, Math.max(0, 1000 - new Date + t1));
 }
 update();
-*/
 
-setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
+
+//setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
 
 /**
  * helps
@@ -121,6 +126,13 @@ app.get('/get', async (req, res) => {
 
 })
 
+app.get('/all', async (req, res) => {
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${ALL_ALIVE}"}`);
+    res.end();
+
+})
 /*
 app.get('/p/first', async (req, res) => {
 

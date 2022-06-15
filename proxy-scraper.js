@@ -67,7 +67,9 @@ async function scrape_proxies(url, opts = { useCheerio: false, customRegex: fals
 
 async function start(ALL_ALIVE) {
     console.log('[SCRAPER] Started')
+
     _proxies = _.union(
+        (ALL_ALIVE.length > 0) ? ALL_ALIVE : null,
         await scrape_proxies('https://sslproxies.org/#'),
         await scrape_proxies('https://us-proxy.org/#'),
         await scrape_proxies('https://free-proxy-list.net/#'),
@@ -115,6 +117,7 @@ async function start(ALL_ALIVE) {
     console.log(`[SCRAPER] Loaded ${_proxies.length} proxies for check`);
 
     //START CHECKING
+    ALL_ALIVE = [];
     let promises = [], index = 0;
     for (let proxy of _proxies) {
         promises.push(proxy_check(proxy).then(r => {
@@ -134,6 +137,5 @@ async function start(ALL_ALIVE) {
     }
 
 }
-
 
 module.exports = start;
