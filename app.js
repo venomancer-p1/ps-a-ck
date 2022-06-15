@@ -14,10 +14,10 @@ var port = process.env.PORT || 8000;
 
 //
 
-/*
+
 const start = require('./proxy-scraper.js');
 var ALL_ALIVE = [];
-var timeout;
+/*var timeout;
 async function update() {
   if (timeout) clearTimeout(timeout);
   const t1 = new Date();
