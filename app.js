@@ -129,7 +129,7 @@ app.get('/get', async (req, res) => {
 app.get('/all', async (req, res) => {
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${ALL_ALIVE}"}`);
+    res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${JSON.stringify(ALL_ALIVE)}"}`);
     res.end();
 
 })
