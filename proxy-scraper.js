@@ -122,9 +122,9 @@ async function start(ALL_ALIVE) {
         promises.push(proxy_check(proxy).then(r => {
             //console.log(r); // true
             console.log(proxy); // true
-            //if (ALL_ALIVE.indexOf(proxy) === -1) {
-            ALL_ALIVE.push(proxy)
-            //}
+            if (!ALL_ALIVE.includes(proxy)) {
+                ALL_ALIVE.push(proxy)
+            }
         }).catch(e => {
             console.error(e); // ECONNRESET
         }));
