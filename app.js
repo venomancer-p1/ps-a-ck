@@ -28,8 +28,14 @@ async function update() {
 update();
 */
 
-setInterval(function () { ALL_ALIVE.push('beautiful') }, 80000);
+setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
 
+/**
+ * helps
+ */
+function random_item(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
 /**
  * bootstrap express app
  */
@@ -108,7 +114,7 @@ app.get('/get', async (req, res) => {
         if (ALL_ALIVE.length > 0) {
             clearInterval(check);
             console.log(ALL_ALIVE)
-            res.write(`{"status": "success", "reason":"ARRAY HAS AN ELEMENT"}`);
+            res.write(`{"status": "success", "proxy":"${random_item(ALL_ALIVE)}"}`);
             res.end();
         }
     }, 500);
