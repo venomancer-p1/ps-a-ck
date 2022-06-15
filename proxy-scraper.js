@@ -117,15 +117,14 @@ async function start(ALL_ALIVE) {
     console.log(`[SCRAPER] Loaded ${_proxies.length} proxies for check`);
 
     //START CHECKING
-    ALL_ALIVE = [];
     let promises = [], index = 0;
     for (let proxy of _proxies) {
         promises.push(proxy_check(proxy).then(r => {
             //console.log(r); // true
             console.log(proxy); // true
-            if (ALL_ALIVE.indexOf(proxy) === -1) {
-                ALL_ALIVE.push(proxy)
-            }
+            //if (ALL_ALIVE.indexOf(proxy) === -1) {
+            ALL_ALIVE.push(proxy)
+            //}
         }).catch(e => {
             console.error(e); // ECONNRESET
         }));
