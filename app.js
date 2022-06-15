@@ -28,7 +28,7 @@ async function update() {
 update();
 */
 
-setInterval(function () { ALL_ALIVE.push('TEST') }, 60000);
+setInterval(function () { ALL_ALIVE.push('beautiful') }, 80000);
 
 /**
  * bootstrap express app
@@ -107,6 +107,7 @@ app.get('/get', async (req, res) => {
     var check = setInterval(function () {
         if (ALL_ALIVE.length > 0) {
             clearInterval(check);
+            console.log(ALL_ALIVE)
             res.write(`{"status": "success", "reason":"ARRAY HAS AN ELEMENT"}`);
             res.end();
         }
