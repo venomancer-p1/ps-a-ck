@@ -28,7 +28,7 @@ async function update() {
 update();
 */
 
-setInterval(function () { console.log(ALL_ALIVE) }, 30000);
+setInterval(function () { ALL_ALIVE.push('TEST') }, 60000);
 
 /**
  * bootstrap express app
@@ -104,10 +104,13 @@ app.get('/ip', async (req, res) => {
 app.get('/get', async (req, res) => {
 
     res.writeHead(202, { 'Content-Type': 'text/html' });
-    await delay(70000);
-    res.write(`{"status": "success", "reason":"passed 70s"}`);
-    res.end();
-
+    var check = setInterval(function () {
+        if (ALL_ALIVE.length > 0) {
+            clearInterval(check);
+            res.write(`{"status": "success", "reason":"ARRAY HAS AN ELEMENT"}`);
+            res.end();
+        }
+    }, 500);
 
 })
 
