@@ -103,7 +103,7 @@ app.get('/ip', async (req, res) => {
 
 app.get('/get', async (req, res) => {
 
-    res.writeHead(202, { 'Content-Type': 'text/html' });
+    res.writeHead(202, { 'Content-Type': 'application/json' });
     var check = setInterval(function () {
         if (ALL_ALIVE.length > 0) {
             clearInterval(check);
