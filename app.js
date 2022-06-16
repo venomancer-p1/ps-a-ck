@@ -123,7 +123,7 @@ app.get('/get', async (req, res) => {
             proxy_check(random).then((r) => {
                 res.write(`{"status": "success", "proxy":"${random}"}`);
                 res.end();
-            }).catch((e))
+            }).catch((e) => { console.log(e) })
         }
     }, 500);
 
