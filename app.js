@@ -4,7 +4,7 @@
 const express = require('express');
 const delay = require('delay');
 const axios = require('axios');
-
+const proxy_check = require('./proxy-checker.js');
 
 
 var host = process.env.HOST || '0.0.0.0';
@@ -119,8 +119,11 @@ app.get('/get', async (req, res) => {
         if (ALL_ALIVE.length > 0) {
             clearInterval(check);
             console.log(ALL_ALIVE)
-            res.write(`{"status": "success", "proxy":"${random_item(ALL_ALIVE)}"}`);
-            res.end();
+            random = random_item(ALL_ALIVE);
+            proxy_check(random).then((r) => {
+                res.write(`{"status": "success", "proxy":"${random}"}`);
+                res.end();
+            }).catch((e))
         }
     }, 500);
 
