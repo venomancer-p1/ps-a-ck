@@ -117,7 +117,6 @@ async function start(ALL_ALIVE) {
     console.log(`[SCRAPER] Loaded ${_proxies.length} proxies for check`);
 
     //START CHECKING
-    ALL_ALIVE = [];
     let promises = [], index = 0;
     for (let proxy of _proxies) {
         promises.push(proxy_check(proxy).then(r => {
