@@ -33,6 +33,11 @@ async function update() {
 update();
 
 
+
+setInterval(function () {
+    axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
+}, 1500000); // every 25 minutes (1500000)
+
 //setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
 
 /**
