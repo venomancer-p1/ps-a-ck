@@ -122,9 +122,9 @@ app.get('/get', async (req, res) => {
     res.writeHead(202, { 'Content-Type': 'application/json' });
     var check = setInterval(function () {
         if (ALL_ALIVE.length > 0) {
-            clearInterval(check);
             random = random_item(ALL_ALIVE);
             proxy_check(random).then((r) => {
+                clearInterval(check);
                 res.write(`{"status": "success", "proxy":"${random}"}`);
                 res.end();
             }).catch((e) => { console.log(e) })
