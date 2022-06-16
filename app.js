@@ -16,15 +16,15 @@ var port = process.env.PORT || 8000;
 
 
 const start = require('./proxy-scraper.js');
-var ALL_ALIVE = [];
+ALL_ALIVE = [];
 var timeout;
 async function update() {
     if (timeout) clearTimeout(timeout);
     const t1 = new Date();
 
-    await start(ALL_ALIVE);
+    await start();
 
-    if (ALL_ALIVE.length > 0) {
+    if (global.ALL_ALIVE.length > 0) {
         console.log(`[MAIN] I'm Tired, I'll take 5 min of break`);
         await delay(300000)
     }
