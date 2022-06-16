@@ -5,7 +5,7 @@ const express = require('express');
 const delay = require('delay');
 const axios = require('axios');
 const proxy_check = require('./proxy-checker.js');
-
+const getToken = require('./hcaptcha.js')
 
 var host = process.env.HOST || '0.0.0.0';
 var port = process.env.PORT || 8000;
@@ -14,7 +14,7 @@ var port = process.env.PORT || 8000;
 
 //
 
-
+/*
 const start = require('./proxy-scraper.js');
 ALL_ALIVE = [];
 var timeout;
@@ -37,7 +37,7 @@ update();
 setInterval(function () {
     axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
 }, 1500000); // every 25 minutes (1500000)
-
+*/
 //setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
 
 /**
@@ -138,6 +138,25 @@ app.get('/all', async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${JSON.stringify(ALL_ALIVE)}"}`);
     res.end();
+
+})
+
+app.get('/token', async (req, res) => {
+
+    //res.writeHead(200, { 'Content-Type': 'application/json' });
+    //res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${JSON.stringify(ALL_ALIVE)}"}`);
+    //res.end();
+    getToken()
+    /*
+        var http = require('http')
+    
+        var body = JSON.stringify({
+            foo: "bar"
+        })
+        `https://hcaptcha.com/getcaptcha?s=${sitekey}`
+        
+    
+        request.end(body)*/
 
 })
 /*
