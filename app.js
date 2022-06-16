@@ -118,7 +118,6 @@ app.get('/get', async (req, res) => {
     var check = setInterval(function () {
         if (ALL_ALIVE.length > 0) {
             clearInterval(check);
-            console.log(ALL_ALIVE)
             random = random_item(ALL_ALIVE);
             proxy_check(random).then((r) => {
                 res.write(`{"status": "success", "proxy":"${random}"}`);
