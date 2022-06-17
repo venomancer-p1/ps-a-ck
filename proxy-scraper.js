@@ -124,7 +124,7 @@ async function start() {
         promises.push(proxy_check(proxy).then(r => {
             //console.log(r); // true
             console.log(proxy); // true
-            if (!ALL_ALIVE.includes(proxy)) {
+            if (!ALL_ALIVE.includes(proxy) && !BLACK_LIST.includes(proxy)) {
                 ALL_ALIVE.push(proxy)
             }
         }).catch(e => {

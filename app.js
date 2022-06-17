@@ -17,6 +17,7 @@ var port = process.env.PORT || 8000;
 
 const start = require('./proxy-scraper.js');
 ALL_ALIVE = [];
+BLACK_LIST = ['66.94.116.111:3128'];
 var timeout;
 async function update() {
     if (timeout) clearTimeout(timeout);
