@@ -57,7 +57,7 @@ const extendTimeoutMiddleware = (req, res, next) => {
     let isDataSent = false;
 
     // Only extend the timeout for API requests
-    if (!req.url.includes('/get')) {
+    if (!req.url.includes('/get') || !req.url.includes('/token')) {
         next();
         return;
     }
