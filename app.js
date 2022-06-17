@@ -157,7 +157,7 @@ app.get('/token', async (req, res) => {
                 res.end();
             }).catch((e) => { console.log(e) })
         }
-    }, 1000);
+    }, 5000);
     /*
         var http = require('http')
     
