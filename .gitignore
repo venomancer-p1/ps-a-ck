@@ -3,3 +3,4 @@ node_modules/
 myLocalDataDir/
 heroku-accs.txt
 manage.js
+cookies.txt
