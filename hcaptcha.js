@@ -3,8 +3,6 @@ const delay = require('delay');
 const axios = require('axios');
 var crypto = require('crypto');
 const querystring = require('querystring');
-const { get } = require('lodash');
-const http = require('https');
 var httpsProxyAgent = require('https-proxy-agent');
 
 let headers = {
@@ -188,7 +186,7 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
 
             });
         }
-        let ret = await myPromise(4000);
+        let ret = await myPromise(10000);
         return ret;
 
     } catch (error) {
@@ -197,116 +195,29 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
 
 }
 
-
-async function http_post(data, proxy) {
-    console.log('entoru')
-    return new Promise((resolve, reject) => {
-        const proxy_options = {
-            method: "CONNECT",
-            hostname: "hcaptcha.com",
-            host: "34.145.226.144",
-            port: "8080",
-            path: "/getcaptcha?s=f99ae21a-1f92-46a4-938e-da6a6afb72ec",
-            timeout: 15000,
-            ciphers: 'ALL',
-            secureProtocol: 'TLSv1_method',
-            headers: {
-                "Host": "hcaptcha.com",
-                "Connection": "keep-alive",
-                "sec-ch-ua": 'Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92',
-                "Accept": "application/json",
-                "sec-ch-ua-mobile": "?0",
-                "Cookie": "hc_accessibility=M3aoUjgk2I5GqkNLVZpoiicU10DzroU0ke89nx1HHYGdRN2IDEFh3IMmXWa7lTp+tM0ZB2CSZn8wWxUvnWywRNd3w4fo4WRlc11MCy4Z/aQcyTKdj+TOMPvZZfZf7gusIAUv2L0mPjVFGL49zMk75pA+wpiwAaXePa98MULN0NN5fES1thuKHFQq64P3pIocrDiygT//N5hVvZUbon5eocSuncm1JYlNYs0DMFJtQlvZA0+9jh+/nPHrlXl/90UZ7uhg3WWfbeieHFBvfmkRzep0YBviXv5Ct+nW5q3biKJq6i/nxj28Z6Civ5dVglXt5HM8p7s8iOwntYEeHYUAuUBmbWfpvWAlQgGGZIaczZEaPk+wTvq1Q9ZNVPKYKW1l5clYSktQMEbxpCHIrBi+qDNseokuzt4g9NsHjr8XMBpdw8f2xKiNfxLxnBRVoGMZSGnCChJbQqagixvWbnjThljIAifpJldOSxLNc8DuYPqvKEI+8GrJBQnP/nOKY+hyhJfN/jUqP/frPq4abETSE5hWr8BHw5by91ApQKLZSzt3quB2lYBNMewpkDK6gr07PTR13Bv5+H+oX6sREzL2pvy2NmRsz7/vwT2/wbmfIlR2xcCYTKrwZmNhhjR/yCgxM8pqt94iAPeie/ND62S+n5usNfotQUbH8/vchPaegvGy5FzspzTC2+I1tyeS1mMMNVNZK80bbhOZIGkGjOzyLQwlFZv8vPtHgyc3qbyo0spCCnIKfP9XzisFddwHMXEAl+6+Ka2XgDt93hw5rq82pMXJP/LbMZGzH0dKz5WWC2Bnu4875quFhibp8czuv/ugI80TqMjDOtVnKn+r0QVonlW5McN0KjZuVuEOFpxfVFFjDEw0navEK4HpqPUiqiame7y4RIkEonBXPdW3EljD0mIG3FUTiwujyKPJl+nilV0BsaBACf2mOGRKHkdLo1KSEND8ujdtAQlO5NZCuQ6gQjmfJ8rLDwQNuqLBDHzHCphmkU6pUhszJCuOz9J8IMpR0f4fOzGFd7gPf50nvER0uPjf9h2qMm+zVLLv+h6ktlaI3MZVbZXxLEp5NxhU2IF4WvztxrrGbMLrLHsA5QgoYA==pl8YHSFx58hJrlCa;",
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36",
-                "Content-type": "application/x-www-form-urlencoded",
-                "Origin": "https://newassets.hcaptcha.com",
-                "Sec-Fetch-Site": "same-site",
-                "Sec-Fetch-Mode": "cors",
-                "Sec-Fetch-Dest": "empty",
-                "Referer": "https://newassets.hcaptcha.com/",
-                "Accept-Language": "en-US,en;q=0.9"
-            },
-            agent: false
-        };
-
-
-        /*callback = function (response) {
-
-            response.on('data', function (chunk) {
-                console.log('eita')
-                str += chunk;
-            });
-
-            response.on('end', function () {
-                //console.log(req.data);
-                //console.log(str);
-                // your code here if you want to use the results !
-            });
-        }*/
-        const req = http.request(proxy_options, function (res) {
-
-            // IS THIS WHERE I GET THE REQUEST BODY, BUT HOW
-            // I NEED TO PUT IT IN A VARIABLE
-            res.setEncoding('utf8');
-            let body = 'haha';
-            res.on('data', chunk => body += chunk);
-            res.on('end', () => {
-
-                console.log(body);
-                //let json = JSON.parse(body);
-                //console.log(json.state);
-
-            });
-        })
-
-        req.on('data', (chunk) => {
-            console.log('cuzky')
-            //body.push(chunk);
-        })
-        req.on('response', res => {
-            console.log('cuzin')
-            req.destroy();
-            console.log('res.statusCode', res.statusCode)
-            //console.log(res)
-            res.on('data', function (chunk) {
-                console.log('eita')
-                //str += chunk;
-            });
-            /*
-            if (res.statusCode === 200) {
-                //console.log(res)
-                return resolve(res);
-            } else {
-                return reject(errors[1]);
-            }*/
-        });
-        req.on('timeout', () => {
-            req.destroy();
-        });
-        req.on('error', err => {
-            return reject((err && err.code) || errors[1]);
-        });
-        req.end(`{
-            "Id": 78912,
-            "Customer": "Jason Sweet",
-          }`);
-    });
-}
-async function getToken() {
+async function getToken(proxy) {
 
     //require('https').get('https://google.com:443', function (res) { console.log(res.statusCode) }).on('error', console.log)
-    requ = await REQ_Data("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec")
-    requ["type"] = "hsl"
-    n = N_Data(requ["req"])
-    resu = await Get_Captcha("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec", n, requ, '34.145.226.144:8080')
-    let captcha;
-    if (resu["generated_pass_UUID"]) {
-        captcha = resu["generated_pass_UUID"]
-        console.log(captcha)
-    } else {
-        throw Error('FAILED TO GET TOKEN')
-    }
+    return new Promise(async (resolve, reject) => {
+        try {
 
+
+            requ = await REQ_Data("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec")
+            requ["type"] = "hsl"
+            n = N_Data(requ["req"])
+            resu = await Get_Captcha("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec", n, requ, proxy)
+            let captcha;
+            if (resu["generated_pass_UUID"]) {
+                captcha = resu["generated_pass_UUID"]
+                resolve(captcha)
+            } else {
+                reject('FAILED TO GET TOKEN')
+            }
+
+        } catch (error) {
+            reject('FAILED TO GET TOKEN')
+        }
+    })
 }
 
 module.exports = getToken;

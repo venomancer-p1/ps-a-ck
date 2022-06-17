@@ -14,7 +14,7 @@ var port = process.env.PORT || 8000;
 
 //
 
-/*
+
 const start = require('./proxy-scraper.js');
 ALL_ALIVE = [];
 var timeout;
@@ -37,7 +37,7 @@ update();
 setInterval(function () {
     axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
 }, 1500000); // every 25 minutes (1500000)
-*/
+
 //setInterval(function () { ALL_ALIVE.push('beautiful'); ALL_ALIVE.push('awesome'); ALL_ALIVE.push('amazing'); ALL_ALIVE.push('increíble') }, 60000);
 
 /**
@@ -146,7 +146,18 @@ app.get('/token', async (req, res) => {
     //res.writeHead(200, { 'Content-Type': 'application/json' });
     //res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${JSON.stringify(ALL_ALIVE)}"}`);
     //res.end();
-    getToken()
+
+    res.writeHead(202, { 'Content-Type': 'application/json' });
+    var check = setInterval(function () {
+        if (ALL_ALIVE.length > 0) {
+            random = random_item(ALL_ALIVE);
+            getToken(random).then((r) => {
+                clearInterval(check);
+                res.write(`{"status": "success", "token":"${r}"}`);
+                res.end();
+            }).catch((e) => { console.log(e) })
+        }
+    }, 1000);
     /*
         var http = require('http')
     
