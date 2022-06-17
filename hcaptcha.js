@@ -4,6 +4,12 @@ const axios = require('axios');
 var crypto = require('crypto');
 const querystring = require('querystring');
 var httpsProxyAgent = require('https-proxy-agent');
+const fs = require('fs');
+const cookies = fs.readFileSync('cookies.txt').toString().replace(/\r\n/g, '\n').split('\n');
+
+function random_item(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
 
 let headers = {
     "Host": "hcaptcha.com",
@@ -145,7 +151,7 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
             "Accept": "application/json",
             "sec-ch-ua-mobile": "?0",
             "Content-length": data.length.toString(),
-            "Cookie": "hc_accessibility=lLBshU8f9By1AXLHSgsVAoZZMEpgi4RB0i7+0ReTcf4dVFGSr49C/eQdgqMtet/L+82XpalgBJKQfvWCSDUYQQUpwdvS6stIs0QJMY/toK/9NcJUdEl1mcuFmwS3bLu1ffZGHRaDpcFJBYvNXHzw5ovm70rPElIKDMWd3rlbXFMRUwfbRzp4T2CnD5QsACBgipBOFD6mUgtY9oxCJY0ZH7wbSSY3H34QL6wS5oD5YwNdu8HdqrFnV5kn0aeCFm7FoSFB44prRsFkHbUiX/Kv5gX8QK+EAuVjVdKxzY0Pq/WarQ6yo78rwPrwklH1B+AT9jvZlC8OtjfmB1gTBu2aEEjo57KcCCYiE6gAss8MhZtwpH7tNhg6hA6UhH8PSkPoyYyCO+wNQt59RVGI8dIetMyVrE1iZgs+pgpxH868PoZTOKLhDAdoLDNOJshtGsozGdw4N7SFXiS6Ho9mVu2RYnzwwuJpP6O/G93zEax9IglTzksvyse2tZbFoab7/IVgQGMQNn51I7p5eulqXHCB663KRl7udfNrOb1TF7zvgoJ3w8M/gixHzrSB+pPHIII4ku7YWO/eNGVTPCKxOUaSXUyXCMF3vFRioIS0yGD9MxgASLZXss0mOBV9foodmjfnJoLLST0RALCnxyK0ojhpMj023kPFfW/TtTwXzhEempTGA32WABd4M0JBtwAIVME5DbltDVzS5Yf85/ynPnZBmf5iDsyYlNQ8M049N0fJIE7FY7gMBlVIiDyuXIlTLUXhtGW5nSPle5FwbqPLCJoOn6rYkam0N1CMOSHiOlcOY+LnpXPltnlMUuBEoEfef6i6XgS3ZGPmXCBW3sVGtjNKVN7t1HO8fX373o5JTk0eyDfYopE8Yz/IoRZJjVPl+DytMN/qtHkLZ72aLkWSiVUJdIB+NNgSQSTV0pFkhpQTbZCtgHH16oiRTe2xe6E2HM1qROfFe86vDkifMJNNKvhAK9vedimvcqNcuhG0V2RAfOWntBDu7aRO/eSqCvk/yCUjXoPJ4DnWW5A0dl3+kRAXg5tSzd/3WAtm6JX1LolPDxD1QSuyH8H/2J/pXLJ6l7npAY4DznD49rNA//R4tasaOBhgFUo=WfUH3j5nC3aUrksa;",
+            "Cookie": `hc_accessibility=${random_item(cookies)};`,
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36",
             "Content-type": "application/x-www-form-urlencoded",
             "Origin": "https://newassets.hcaptcha.com",
