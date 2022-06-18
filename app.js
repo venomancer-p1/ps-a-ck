@@ -132,6 +132,15 @@ app.get('/get', async (req, res) => {
         }
     }, 500);
 
+    req.on('close', () => {
+        clearInterval(check);
+        return res.end();
+    });
+    req.on('end', () => {
+        clearInterval(check);
+        return res.end();
+    });
+
 })
 
 app.get('/all', async (req, res) => {
@@ -161,6 +170,15 @@ app.get('/token', async (req, res) => {
             }).catch((e) => { console.log(e) })
         }
     }, 500);
+
+    req.on('close', () => {
+        clearInterval(checka);
+        return res.end();
+    });
+    req.on('end', () => {
+        clearInterval(checka);
+        return res.end();
+    });
     /*
         var http = require('http')
     
