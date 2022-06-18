@@ -149,11 +149,13 @@ app.get('/token', async (req, res) => {
     //res.end();
 
     res.writeHead(202, { 'Content-Type': 'application/json' });
-    var check = setInterval(function () {
-        if (ALL_ALIVE.length > 0) {
+    let done = false;
+    var checka = setInterval(function () {
+        if (ALL_ALIVE.length > 0 && !done) {
             random = random_item(ALL_ALIVE);
             getToken(random).then((r) => {
-                clearInterval(check);
+                done = true
+                clearInterval(checka);
                 res.write(`{"status": "success", "token":"${r}"}`);
                 res.end();
             }).catch((e) => { console.log(e) })

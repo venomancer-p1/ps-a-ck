@@ -71,6 +71,10 @@ async function start() {
 
     _proxies = _.union(
         (ALL_ALIVE.length > 0) ? ALL_ALIVE : null,
+        await scrape_proxies('https://www.proxydocker.com/en/proxylist/', { useCheerio: true, isDocker: true }),
+        await scrape_proxies('https://www.proxydocker.com/en/proxylist/search?need=all&type=http-https&anonymity=TRANSPARENT&port=&country=&city=&state=all', { useCheerio: true, isDocker: true }),
+        await scrape_proxies('https://www.proxydocker.com/en/proxylist/search?need=all&type=http-https&anonymity=ELITE&port=&country=&city=&state=all', { useCheerio: true, isDocker: true }),
+        await scrape_proxies('https://www.proxydocker.com/en/proxylist/search?need=all&type=http-https&anonymity=ANONYMOUS&port=&country=&city=&state=all', { useCheerio: true, isDocker: true }),
         await scrape_proxies('https://sslproxies.org/#'),
         await scrape_proxies('https://us-proxy.org/#'),
         await scrape_proxies('https://free-proxy-list.net/#'),
@@ -106,10 +110,6 @@ async function start() {
         await scrape_proxies('http://nntime.com/proxy-updated-09.htm', { useCheerio: true, isNN: true }),
         await scrape_proxies('http://nntime.com/proxy-updated-10.htm', { useCheerio: true, isNN: true }),
         await scrape_proxies('http://nntime.com/proxy-updated-11.htm', { useCheerio: true, isNN: true }),
-        await scrape_proxies('https://www.proxydocker.com/en/proxylist/', { useCheerio: true, isDocker: true }),
-        await scrape_proxies('https://www.proxydocker.com/en/proxylist/search?need=all&type=http-https&anonymity=TRANSPARENT&port=&country=&city=&state=all', { useCheerio: true, isDocker: true }),
-        await scrape_proxies('https://www.proxydocker.com/en/proxylist/search?need=all&type=http-https&anonymity=ELITE&port=&country=&city=&state=all', { useCheerio: true, isDocker: true }),
-        await scrape_proxies('https://www.proxydocker.com/en/proxylist/search?need=all&type=http-https&anonymity=ANONYMOUS&port=&country=&city=&state=all', { useCheerio: true, isDocker: true }),
         await scrape_proxies('https://premiumproxy.net/http-proxy-list', { useCheerio: true }),
         await scrape_proxies('https://proxy-daily.com/', { useCheerio: true, isDaily: true }),
         await scrape_proxies('http://rootjazz.com/proxies/proxies.txt'),
