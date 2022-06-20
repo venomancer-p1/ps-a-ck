@@ -179,6 +179,14 @@ app.get('/token', async (req, res) => {
         clearInterval(checka);
         return res.end();
     });
+    res.on('end', () => {
+        clearInterval(checka);
+        return res.end();
+    })
+    res.on('close', () => {
+        clearInterval(checka);
+        return res.end();
+    });
     /*
         var http = require('http')
     
