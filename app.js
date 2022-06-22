@@ -83,7 +83,7 @@ const workers = [
     },
 ];
 
-setInterval(function () {
+setInterval(async function () {
 
     //Ping server to avoid idle
     axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
@@ -91,29 +91,31 @@ setInterval(function () {
     //Cron Job
     for (worker of workers) {
 
-        axios.get(`https://${worker.name}.herokuapp.com/p/dog`).then((res) => {
-            if (res.data.status === 'success') {
-                Key.create({
-                    api_key: res.data.api_key
+        await axios.get(`https://${worker.name}.herokuapp.com/p/dog`)
+            .then((res) => {
+                if (res.data.status === 'success') {
+                    Key.create({
+                        api_key: res.data.api_key
+                    })
+                }
+            })
+            .catch((err) => console.log(err))
+            .finally(async () => {
+                await axios.delete(`https://api.heroku.com/apps/${worker.name}/build-cache`, {
+                    headers: {
+                        "accept": "application/vnd.heroku+json; version=3",
+                        "content-type": "application/json",
+                        "authorization": "Bearer " + worker.api,
+                    }
                 })
-            }
-
-        }).catch((err) => console.log(err)).finally(() => {
-            axios.delete(`https://api.heroku.com/apps/${worker.name}/build-cache`, {
-                headers: {
-                    "accept": "application/vnd.heroku+json; version=3",
-                    "content-type": "application/json",
-                    "authorization": "Bearer " + worker.api,
-                }
-            })
-            axios.delete(`https://api.heroku.com/apps/${worker.name}/dynos`, {
-                headers: {
-                    "accept": "application/vnd.heroku+json; version=3",
-                    "content-type": "application/json",
-                    "authorization": "Bearer " + worker.api,
-                }
-            })
-        });
+                await axios.delete(`https://api.heroku.com/apps/${worker.name}/dynos`, {
+                    headers: {
+                        "accept": "application/vnd.heroku+json; version=3",
+                        "content-type": "application/json",
+                        "authorization": "Bearer " + worker.api,
+                    }
+                })
+            });
 
     }
 
