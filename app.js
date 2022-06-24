@@ -1,18 +1,22 @@
 /**
  * npm module deps
  */
-const express = require('express');
-const mongoose = require('mongoose');
+const express = require('express')
+const mongoose = require('mongoose')
 
-const delay = require('delay');
-const axios = require('axios');
-const proxy_check = require('./proxy-checker.js');
-const getToken = require('./hcaptcha.js')
+const delay = require('delay')
+const axios = require('axios')
+const proxy_check = require('./proxy-checker.js')
+const h_getToken = require('./hcaptcha.js')
+const r_getToken = require('./recaptcha.js')
+
+
+//
+
+const _util = require('htvenom')
 
 var host = process.env.HOST || '0.0.0.0';
 var port = process.env.PORT || 8000;
-
-const Key = require('./models/Key');
 
 //
 
@@ -21,7 +25,7 @@ const start = require('./proxy-scraper.js');
 ALL_ALIVE = [];
 BLACK_LIST = ['66.94.116.111:3128'];
 var timeout;
-async function update() {
+/*async function update() {
     if (timeout) clearTimeout(timeout);
     const t1 = new Date();
 
@@ -33,7 +37,7 @@ async function update() {
     }
     timeout = setTimeout(update, Math.max(0, 1000 - new Date + t1));
 }
-update();
+update();*/
 
 
 
@@ -88,36 +92,37 @@ setInterval(async function () {
     //Ping server to avoid idle
     axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
 
+
     //Cron Job
-    for (worker of workers) {
+    // for (worker of workers) {
 
-        await axios.get(`https://${worker.name}.herokuapp.com/p/dog`)
-            .then((res) => {
-                if (res.data.status === 'success') {
-                    Key.create({
-                        api_key: res.data.api_key
-                    })
-                }
-            })
-            .catch((err) => console.log(err))
-            .finally(async () => {
-                await axios.delete(`https://api.heroku.com/apps/${worker.name}/build-cache`, {
-                    headers: {
-                        "accept": "application/vnd.heroku+json; version=3",
-                        "content-type": "application/json",
-                        "authorization": "Bearer " + worker.api,
-                    }
-                })
-                await axios.delete(`https://api.heroku.com/apps/${worker.name}/dynos`, {
-                    headers: {
-                        "accept": "application/vnd.heroku+json; version=3",
-                        "content-type": "application/json",
-                        "authorization": "Bearer " + worker.api,
-                    }
-                })
-            });
+    //     await axios.get(`https://${worker.name}.herokuapp.com/p/dog`)
+    //         .then((res) => {
+    //             if (res.data.status === 'success') {
+    //                 Key.create({
+    //                     api_key: res.data.api_key
+    //                 })
+    //             }
+    //         })
+    //         .catch((err) => console.log(err))
+    //         .finally(async () => {
+    //             await axios.delete(`https://api.heroku.com/apps/${worker.name}/build-cache`, {
+    //                 headers: {
+    //                     "accept": "application/vnd.heroku+json; version=3",
+    //                     "content-type": "application/json",
+    //                     "authorization": "Bearer " + worker.api,
+    //                 }
+    //             })
+    //             await axios.delete(`https://api.heroku.com/apps/${worker.name}/dynos`, {
+    //                 headers: {
+    //                     "accept": "application/vnd.heroku+json; version=3",
+    //                     "content-type": "application/json",
+    //                     "authorization": "Bearer " + worker.api,
+    //                 }
+    //             })
+    //         });
 
-    }
+    // }
 
 
 }, 1500000); // every 25 minutes (1500000)
@@ -134,6 +139,18 @@ function random_item(items) {
  * bootstrap express app
  */
 const app = new express();
+
+app.use(express.urlencoded({
+    extended: true
+}))
+
+app.use(express.json())
+
+/**
+ * Routes
+ */
+const keyRoutes = require('./routes/keyRoutes')
+app.use('/key', keyRoutes)
 
 const extendTimeoutMiddleware = (req, res, next) => {
     const space = ' ';
@@ -245,7 +262,7 @@ app.get('/token', async (req, res) => {
     var checka = setInterval(function () {
         if (ALL_ALIVE.length > 0 && !done) {
             random = random_item(ALL_ALIVE);
-            getToken(random).then((r) => {
+            h_getToken(random).then((r) => {
                 done = true
                 clearInterval(checka);
                 res.write(`{"status": "success", "token":"${r}"}`);
@@ -282,85 +299,89 @@ app.get('/token', async (req, res) => {
         request.end(body)*/
 
 })
-/*
-app.get('/p/first', async (req, res) => {
 
-    res.writeHead(202, { 'Content-Type': 'application/json' });
-    if (!req.query.email || !req.query.pass) {
+
+app.get('/rcaptcha', async (req, res) => {
+
+    if (!req.query.sitekey || !req.query.token) {
         res.set('Content-Type', 'text/html');
-        return res.status(404).send('<h3>Not Found<h3><br><strong>Please use /p/first?email=YOUR_EMAIL&pass=YOUR_PASS</strong>')
+        return res.status(404).send('<h3>Not Found<h3>')
     }
-    res.setTimeout(150000, function () {
-        console.log('Request has timed out.');
-        res.sendStatus(408);
-    });
-    req.on('close', () => {
-        return res.end();
-    });
-    req.on('end', () => {
-        return res.end();
-    });
+    res.writeHead(202, { 'Content-Type': 'application/json' });
+
     try {
+        console.log('rcaptcha started')
 
-        let start = Date.now();
-        const client = new protonmail.ProtonmailClient();
+        let result = await _util.pRetry({
+            promise: r_getToken,
+            params: [req.query.sitekey, req.query.token],
+            options: {
+                timeout: 40000, //promise timeout in ms
+                retries: 3, //N of retries
+                message: '[RECAPTCHA] TIMED OUT' //custom timeout message
+            }
+        })
 
-        // login to the protonmail
-        await client.login({
-            username: req.query.email,
-            loginPassword: req.query.pass,
-        });
-
-        // fetch private keys in order to decrypt messages
-        await client.fetchKeys({
-            password: req.query.pass,
-        });
-
-        // fetch the first 2 messages
-        const messagesResponse = await client.messages.list({
-            LabelID: protonmail.DefaultLabels.All,
-            Limit: 2,
-            Page: 0,
-        });
-
-        // take the first one
-        const firstMessage = messagesResponse.Messages[0];
-        // get the full message with body
-        const m = await client.messages.get(firstMessage.ID);
-
-        // decrypt message
-        const m_decrypted = await client.decryptMessage(m.Message);
-
-        let stop = Date.now();
-        const $ = cheerio.load(m_decrypted, {
-            xml: {
-                normalizeWhitespace: true,
-            },
-        });
-        let txt = $('body').text();
-        message = txt.replaceAll(/(\r\n|\r|\n)/g, '\n').replaceAll(/\s\s+|\xA0|&nbsp;/g, ' ');
-
-        await client.logout();
-
-        res.write(`{"status": "success", "duration":"${(stop - start) / 1000}s", "message":"${message}"}`);
+        res.write(`{"status": "success", "token":"${result}"}`);
         res.end();
-
-
 
     } catch (error) {
-        console.log(error)
-        res.write(`{"status": "failed", "reason":"Internal Error"}`);
+
+        res.write(`{"status": "failed", "reason":"${error.message}"}`);
         res.end();
+
+    }
+})
+
+
+app.get('/rcaptcha', async (req, res) => {
+
+    if (!req.query.sitekey || !req.query.token) {
+        res.set('Content-Type', 'text/html');
+        return res.status(404).send('<h3>Not Found<h3>')
+    }
+    res.writeHead(202, { 'Content-Type': 'application/json' });
+
+    try {
+        console.log('rcaptcha started')
+
+        let result = await _util.pRetry({
+            promise: r_getToken,
+            params: [req.query.sitekey, req.query.token],
+            options: {
+                timeout: 40000, //promise timeout in ms
+                retries: 3, //N of retries
+                message: '[RECAPTCHA] TIMED OUT' //custom timeout message
+            }
+        })
+
+        res.write(`{"status": "success", "token":"${result}"}`);
+        res.end();
+
+    } catch (error) {
+
+        res.write(`{"status": "failed", "reason":"${error.message}"}`);
+        res.end();
+
     }
 
-})*/
+})
+
+
+app.get('/', async (req, res) => {
+
+    res.json({ message: 'Hello World!' })
+
+})
+
 
 
 // TODO: allow server config
 
 //mongoose.connect(`${process.env.DBuri}`)
 mongoose
-    .connect(`${process.env.db_uri}`)
+    //.connect(`${process.env.db_uri}`)
+
     .then(() => {
         console.log('[SERVER] Database conneted')
         app.listen(port, host, function () {
