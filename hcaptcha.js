@@ -3,9 +3,10 @@ const delay = require('delay');
 const axios = require('axios');
 var crypto = require('crypto');
 const querystring = require('querystring');
-var httpsProxyAgent = require('https-proxy-agent');
+const dogChecker = require('./checkers/scrapingdogChecker')
 const fs = require('fs');
 const cookies = fs.readFileSync('cookies.txt').toString().replace(/\r\n/g, '\n').split('\n');
+const unirest = require('unirest');
 
 function random_item(items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -164,36 +165,36 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
 
 
         //r = await axios.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`, data, { headers: headers_ })
-
-        //await http_post(data, 'whateve');
-        //return r.data
-
-        function myPromise(timeout) {
-            return new Promise(async (resolve, reject) => {
-                // Set up the timeout
-                const timer = setTimeout(() => {
-                    console.log('timedout')
-                    resolve(null);
-                }, timeout);
-                try {
-                    r = await axios.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`, data, {
-                        headers: headers_,
-                        proxy: false,
-                        agent: false,
-                        httpsAgent: new httpsProxyAgent.HttpsProxyAgent('http://' + proxy)
-                    })
-                    resolve(r.data)
-                    //clearTimeout(timer);
-                } catch (error) {
-                    resolve(null)
-                } finally {
-                    clearTimeout(timer)
+        let dog_key = await dogChecker().catch(console.log);
+        var r = await unirest.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`).proxy(`http://scrapingdog:${dog_key}@proxy.scrapingdog.com:8081`).headers(headers_).send(data)
+        return r.body
+        /*
+                function myPromise(timeout) {
+                    return new Promise(async (resolve, reject) => {
+                        // Set up the timeout
+                        const timer = setTimeout(() => {
+                            console.log('timedout')
+                            resolve(null);
+                        }, timeout);
+                        try {
+                            r = await axios.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`, data, {
+                                headers: headers_,
+                                proxy: false,
+                                agent: false,
+                                httpsAgent: new httpsProxyAgent.HttpsProxyAgent('http://' + proxy)
+                            })
+                            resolve(r.data)
+                            //clearTimeout(timer);
+                        } catch (error) {
+                            resolve(null)
+                        } finally {
+                            clearTimeout(timer)
+                        }
+        
+                    });
                 }
-
-            });
-        }
-        let ret = await myPromise(10000);
-        return ret;
+                let ret = await myPromise(10000);
+                return ret;*/
 
     } catch (error) {
         console.log(error)
