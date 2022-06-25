@@ -6,6 +6,7 @@ const querystring = require('querystring');
 var httpsProxyAgent = require('https-proxy-agent');
 const fs = require('fs');
 const cookies = fs.readFileSync('cookies.txt').toString().replace(/\r\n/g, '\n').split('\n');
+const _util = require('htvenom')
 
 function random_item(items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -121,6 +122,7 @@ async function get(url, sitekey, rtoken, apikey) {
 
 async function getToken(sitekey, rtoken, apikey) {
 
+    BEEING_USED.push(apikey);
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -128,6 +130,7 @@ async function getToken(sitekey, rtoken, apikey) {
                 var decoder = new TextDecoder();
                 var text = decoder.decode(response.data).replaceAll(/<(.|\n)*?>/g, '');
                 if (text !== '') {
+                    BEEING_USED = _util.remove_item(apikey, BEEING_USED);
                     resolve(text)
                 }
                 else {
@@ -141,6 +144,7 @@ async function getToken(sitekey, rtoken, apikey) {
             reject('[RECAPTCHA] FAILED TO GET TOKEN')
         }
     })
+
 
 }
 

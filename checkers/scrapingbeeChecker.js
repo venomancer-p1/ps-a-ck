@@ -12,13 +12,19 @@ async function beeChecker() {
             let random_bee_key;
             do {
 
+
+                random_bee_key = await Scrapingbee.aggregate([{ $sample: { size: 1 } }]);
+                api_key = random_bee_key[0].api_key;
+                if (BEEING_USED.includes(api_key)) {
+                    continue;
+                }
+
                 let dog_key = await dogChecker().catch(console.log);
                 if (!dog_key) {
                     limit++;
                     continue;
                 }
-                random_bee_key = await Scrapingbee.aggregate([{ $sample: { size: 1 } }]);
-                api_key = random_bee_key[0].api_key;
+
                 data = await unirest.get(`https://app.scrapingbee.com/api/v1/usage?api_key=${api_key}`).proxy(`http://scrapingdog:${dog_key}@proxy.scrapingdog.com:8081`)
                     .then(async (response) => {
                         let body = response.body
@@ -48,7 +54,7 @@ async function beeChecker() {
                     .catch(err => console.log(err))
 
                 if (limit >= 15)
-                    throw new Error('The sBEE database is problaby without valid elements')
+                    throw new Error('The sBEE database is problaby without valid elements at the moment')
                 limit++;
 
             } while (!data);

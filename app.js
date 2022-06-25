@@ -22,6 +22,7 @@ var port = process.env.PORT || 8000;
 
 
 const start = require('./proxy-scraper.js');
+BEEING_USED = [];
 ALL_ALIVE = [];
 BLACK_LIST = ['66.94.116.111:3128'];
 var timeout;
@@ -39,7 +40,7 @@ var timeout;
 }
 update();*/
 
-
+setInterval(function () { console.log(BEEING_USED) }, 10000);
 
 const workers = [
     {
@@ -90,7 +91,7 @@ const workers = [
 setInterval(async function () {
 
     //Ping server to avoid idle
-    axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
+    //axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
 
 
     //Cron Job
