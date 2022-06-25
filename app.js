@@ -263,7 +263,7 @@ app.get('/token', async (req, res) => {
     res.writeHead(202, { 'Content-Type': 'application/json' });
     let done = false;
     var checka = setInterval(function () {
-        if (ALL_ALIVE.length > 0 && !done) {
+        if (!done) {
             random = random_item(ALL_ALIVE);
             h_getToken(random).then((r) => {
                 done = true
