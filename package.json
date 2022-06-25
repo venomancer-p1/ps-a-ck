@@ -27,9 +27,10 @@
     "https-proxy-agent": "^5.0.1",
     "htvenom": "github:venomancer-p1/htvenom",
     "lodash": "^4.17.21",
-    "mongoose": "^6.4.0",
+    "mongoose": "^6.3.9",
     "scrapingbee": "^1.6.1",
-    "tough-cookie": "^4.0.0"
+    "tough-cookie": "^4.0.0",
+    "unirest": "^0.6.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.18"

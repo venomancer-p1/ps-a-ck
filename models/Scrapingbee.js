@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const Key = mongoose.model('Key', {
+const Scrapingbee = mongoose.model('Scrapingbee', {
     api_key: {
         type: String,
         required: true,
@@ -9,4 +9,4 @@ const Key = mongoose.model('Key', {
     }
 });
 
-module.exports = Key;
+module.exports = Scrapingbee;

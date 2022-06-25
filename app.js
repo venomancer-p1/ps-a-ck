@@ -90,7 +90,7 @@ const workers = [
 setInterval(async function () {
 
     //Ping server to avoid idle
-    axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
+    //axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
 
 
     //Cron Job
@@ -149,8 +149,10 @@ app.use(express.json())
 /**
  * Routes
  */
-const keyRoutes = require('./routes/keyRoutes')
-app.use('/key', keyRoutes)
+const scrapingdogRoutes = require('./routes/scrapingdogRoutes')
+const scrapingbeeRoutes = require('./routes/scrapingbeeRoutes')
+app.use('/scrapingdog', scrapingdogRoutes)
+app.use('/scrapingbee', scrapingbeeRoutes)
 
 const extendTimeoutMiddleware = (req, res, next) => {
     const space = ' ';
@@ -380,13 +382,13 @@ app.get('/', async (req, res) => {
 
 //mongoose.connect(`${process.env.DBuri}`)
 mongoose
-    //.connect(`${process.env.db_uri}`)
-
+    .connect(`${process.env.db_uri}`)
     .then(() => {
         console.log('[SERVER] Database conneted')
         app.listen(port, host, function () {
             console.log('[SERVER] Listening on ' + host + ':' + port);
         });
+
     })
     .catch((err) => console.log(err))
 
