@@ -160,7 +160,7 @@ const extendTimeoutMiddleware = (req, res, next) => {
     let isDataSent = false;
 
     // Only extend the timeout for API requests
-    if (!req.url.includes('/get') && !req.url.includes('/token')) {
+    if (!req.url.includes('/get') && !req.url.includes('/token') && !req.url.includes('/rcaptcha')) {
         next();
         return;
     }
@@ -335,39 +335,6 @@ app.get('/rcaptcha', async (req, res) => {
     }
 })
 
-
-app.get('/rcaptcha', async (req, res) => {
-
-    if (!req.query.sitekey || !req.query.token) {
-        res.set('Content-Type', 'text/html');
-        return res.status(404).send('<h3>Not Found<h3>')
-    }
-    res.writeHead(202, { 'Content-Type': 'application/json' });
-
-    try {
-        console.log('rcaptcha started')
-
-        let result = await _util.pRetry({
-            promise: r_getToken,
-            params: [req.query.sitekey, req.query.token],
-            options: {
-                timeout: 40000, //promise timeout in ms
-                retries: 3, //N of retries
-                message: '[RECAPTCHA] TIMED OUT' //custom timeout message
-            }
-        })
-
-        res.write(`{"status": "success", "token":"${result}"}`);
-        res.end();
-
-    } catch (error) {
-
-        res.write(`{"status": "failed", "reason":"${error.message}"}`);
-        res.end();
-
-    }
-
-})
 
 
 app.get('/', async (req, res) => {
