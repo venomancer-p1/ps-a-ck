@@ -305,7 +305,7 @@ app.get('/token', async (req, res) => {
 
 app.get('/rcaptcha', async (req, res) => {
 
-    if (!req.query.sitekey || !req.query.token) {
+    if (!req.query.sitekey || !req.query.token || req.query.apikey) {
         res.set('Content-Type', 'text/html');
         return res.status(404).send('<h3>Not Found<h3>')
     }
@@ -316,7 +316,7 @@ app.get('/rcaptcha', async (req, res) => {
 
         let result = await _util.pRetry({
             promise: r_getToken,
-            params: [req.query.sitekey, req.query.token],
+            params: [req.query.sitekey, req.query.token, req.query.apikey],
             options: {
                 timeout: 40000, //promise timeout in ms
                 retries: 3, //N of retries

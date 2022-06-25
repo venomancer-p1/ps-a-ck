@@ -14,14 +14,14 @@ function random_item(items) {
 const scrapingbee = require('scrapingbee');
 
 
-async function get(url, sitekey, rtoken) {
+async function get(url, sitekey, rtoken, apikey) {
 
     var isPremium = true;
     let fifty_fifty = Math.round(Math.random()) + 1;
     if (fifty_fifty == 2) isPremium = false
 
 
-    var client = new scrapingbee.ScrapingBeeClient('DUD6NGNR3KVNVH1UVSNNR2MY2PLP0RS6J1QWEBQHUMI3CI3GJPTUPC3F15I4SFQLFS8TF9EZB003HUK5');
+    var client = new scrapingbee.ScrapingBeeClient(apikey);
     var response = await client.get({
         url: url,
         params: {
@@ -78,12 +78,12 @@ async function get(url, sitekey, rtoken) {
     return response;
 }
 
-async function getToken(sitekey, rtoken) {
+async function getToken(sitekey, rtoken, apikey, apikey) {
 
     return new Promise(async (resolve, reject) => {
         try {
 
-            await get('https://www.google.com/recaptcha/api2/demo', sitekey, rtoken).then(function (response) {
+            await get('https://www.google.com/recaptcha/api2/demo', sitekey, rtoken, apikey).then(function (response) {
                 var decoder = new TextDecoder();
                 var text = decoder.decode(response.data).replaceAll(/<(.|\n)*?>/g, '');
                 if (text !== '') {
