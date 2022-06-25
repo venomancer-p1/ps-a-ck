@@ -90,7 +90,7 @@ const workers = [
 setInterval(async function () {
 
     //Ping server to avoid idle
-    //axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
+    axios.get("http://" + process.env.app_name + ".herokuapp.com/ip");
 
 
     //Cron Job
