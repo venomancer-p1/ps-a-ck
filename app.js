@@ -305,7 +305,7 @@ app.get('/token', async (req, res) => {
 
 app.get('/rcaptcha', async (req, res) => {
 
-    if (!req.query.sitekey || !req.query.token || req.query.apikey) {
+    if (!req.query.sitekey || !req.query.token || !req.query.apikey) {
         res.set('Content-Type', 'text/html');
         return res.status(404).send('<h3>Not Found<h3>')
     }
