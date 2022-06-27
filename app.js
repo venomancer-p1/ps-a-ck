@@ -269,7 +269,6 @@ app.get('/token', async (req, res) => {
     //         random = random_item(ALL_ALIVE);
     h_getToken().then((r) => {
         done = true
-        clearInterval(checka);
         res.write(`{"status": "success", "token":"${r}"}`);
     }).catch((e) => { console.log(e) }).finally(() => res.end())
     //     }
