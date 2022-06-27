@@ -173,7 +173,7 @@ async function Get_Captcha(host, sitekey, n, requ) {
 
         //r = await axios.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`, data, { headers: headers_ })
         let dog_key = await dogChecker().catch(console.log);
-        var r = await unirest.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`).proxy(`http://scrapingdog:${dog_key}-country=random@proxy.scrapingdog.com:8081`).headers(headers_).send(data)
+        var r = await unirest.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`).proxy(`http://scrapingdog:${dog_key}@proxy.scrapingdog.com:8081`).headers(headers_).send(data)
         return r.body
         /*
                 function myPromise(timeout) {
