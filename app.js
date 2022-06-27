@@ -16,7 +16,7 @@ const r_getToken = require('./recaptcha.js')
 const _util = require('htvenom')
 
 var host = process.env.HOST || '0.0.0.0';
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 8001;
 
 //
 
@@ -40,7 +40,7 @@ var timeout;
 }
 update();*/
 
-setInterval(function () { console.log(BEEING_USED) }, 10000);
+//setInterval(function () { console.log(BEEING_USED) }, 10000);
 
 const workers = [
     {
@@ -152,8 +152,10 @@ app.use(express.json())
  */
 const scrapingdogRoutes = require('./routes/scrapingdogRoutes')
 const scrapingbeeRoutes = require('./routes/scrapingbeeRoutes')
+const emailRoutes = require('./routes/emailRoutes')
 app.use('/scrapingdog', scrapingdogRoutes)
 app.use('/scrapingbee', scrapingbeeRoutes)
+app.use('/mail', emailRoutes)
 
 const extendTimeoutMiddleware = (req, res, next) => {
     const space = ' ';
@@ -262,34 +264,33 @@ app.get('/token', async (req, res) => {
 
     res.writeHead(202, { 'Content-Type': 'application/json' });
     let done = false;
-    var checka = setInterval(function () {
-        if (!done) {
-            random = random_item(ALL_ALIVE);
-            h_getToken(random).then((r) => {
-                done = true
-                clearInterval(checka);
-                res.write(`{"status": "success", "token":"${r}"}`);
-                res.end();
-            }).catch((e) => { console.log(e) })
-        }
-    }, 500);
+    // var checka = setInterval(function () {
+    //     if (!done) {
+    //         random = random_item(ALL_ALIVE);
+    h_getToken(random).then((r) => {
+        done = true
+        clearInterval(checka);
+        res.write(`{"status": "success", "token":"${r}"}`);
+    }).catch((e) => { console.log(e) }).finally(() => res.end())
+    //     }
+    // }, 500);
 
-    req.on('close', () => {
-        clearInterval(checka);
-        return res.end();
-    });
-    req.on('end', () => {
-        clearInterval(checka);
-        return res.end();
-    });
-    res.on('end', () => {
-        clearInterval(checka);
-        return res.end();
-    })
-    res.on('close', () => {
-        clearInterval(checka);
-        return res.end();
-    });
+    // req.on('close', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // });
+    // req.on('end', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // });
+    // res.on('end', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // })
+    // res.on('close', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // });
     /*
         var http = require('http')
     

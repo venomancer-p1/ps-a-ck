@@ -152,7 +152,7 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
             "Accept": "application/json",
             "sec-ch-ua-mobile": "?0",
             "Content-length": data.length.toString(),
-            "Cookie": `hc_accessibility=${random_item(cookies)};`,
+            "Cookie": `hc_accessibility=kBrbm9CDozJw6pnMFT7+KlrYSjfmH7Wjfad1CibExYeqlkHGvAIp0MIRnQsCpdWZaeB5LHzijKENt9OghbrsYAdAh1WqBAaD6v3l3DXBasIjgMv/4IwmHad7LhySUvqvD/J7gtqIwIYa9frcSPJgYqXhyh7vLISMd7+Ov+cTgPiCW6alis05/CL6ZsBsgp8y6YU/hRIMVvC9RXPwy9YwMb4X12gXpkbilz++FFe0fm0oOu0jY/Q4PCnrBAvWwIYTsY6LBBAs7AqA+RzlEJcuF5Fw2TFTC47LoJYLk8NxADFR0DIhJmHIbiIP8C4awT21pvP/ixaoPpztBvobzyeC4OJobOPIgS2ozyYJ6fABtG5f+8bTGMLtjEcYIQ25Q1I6aRdy5XcGoVb1v9wWJHIunUkbwcBNXZUMLfnJgZSbLJyybZQOD95+Amj0kxASszYkfzuvqY5JCPCQaTUS3LaPXf8DOrEihLBVWDom2AVFrsi8vpCVUTw9qf7+46DIgix29TjvxqAWk8LyjCTbhcQlE4bNZ60lC3bjjAdZk6FieWP8fzXv2JS5ceNqO5uLm6FVHn0+1KLFQiSUm3p1oGz/worTZReQfAjdRE2/rS8Ly4bbQ1HXD8VizOgraPcPU8qmJzOdrNXtoGJwm+I8azLocwfrTPt1SF/7L/Z5vMycgwxcm9JywAQ8XPtCRTGsWw9BVFvAfMQkn779yQU1wErgX5SeQvcIvtPrUPMYi4L64DgRK1NpR3fF/TmoQFEbqMBF+MyNDSJpToa6X1PMiuuloVIryTkc8ZBfL4VPeMWcYEVvlua5z3/v+lnphUGYn6j30U3et+b8/PXqZ5gMCaPwDaBKnt9sKeTEapfrXHiZbqCZAWmdtDDoLFnGIs2GdX1ibbm6wenyFaMsd2vOlqykxNNtMVTIO4rxveUg/3AHpPk6C1QorB5QInVKHx1YCvH7HtblnIoaUNntqXjivFDD/f1rSrrqA8prwEPzKEMBC+GeRQFSJwq+V77/7h8ubInB4pypLlNmbUgwG7VIIIrdq6UZ+7qsas4CQ0UK93InuOlcsciSzX2mDISIQfY0THNT3FqgnVrps322xmHWoQPJJg==OdLLoeP81dwQOKvT;`,
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36",
             "Content-type": "application/x-www-form-urlencoded",
             "Origin": "https://newassets.hcaptcha.com",
@@ -162,11 +162,11 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
             "Referer": "https://newassets.hcaptcha.com/",
             "Accept-Language": "en-US,en;q=0.9"
         }
-
+        //${random_item(cookies)}
 
         //r = await axios.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`, data, { headers: headers_ })
-        let dog_key = await dogChecker().catch(console.log);
-        var r = await unirest.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`).proxy(`http://scrapingdog:${dog_key}@proxy.scrapingdog.com:8081`).headers(headers_).send(data)
+        //let dog_key = await dogChecker().catch(console.log);
+        var r = await unirest.post(`https://hcaptcha.com/getcaptcha?s=${sitekey}`)/*.proxy(`http://scrapingdog:${dog_key}@proxy.scrapingdog.com:8081`)*/.headers(headers_).send(data)
         return r.body
         /*
                 function myPromise(timeout) {
