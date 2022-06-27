@@ -130,7 +130,7 @@ async function REQ_Data(host, sitekey) {
         return false;
     }
 }
-async function Get_Captcha(host, sitekey, n, requ, proxy) {
+async function Get_Captcha(host, sitekey, n, requ) {
 
     try {
 
@@ -202,7 +202,7 @@ async function Get_Captcha(host, sitekey, n, requ, proxy) {
 
 }
 
-async function getToken(proxy) {
+async function getToken() {
 
     //require('https').get('https://google.com:443', function (res) { console.log(res.statusCode) }).on('error', console.log)
     return new Promise(async (resolve, reject) => {
@@ -212,7 +212,7 @@ async function getToken(proxy) {
             requ = await REQ_Data("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec")
             requ["type"] = "hsl"
             n = N_Data(requ["req"])
-            resu = await Get_Captcha("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec", n, requ, proxy)
+            resu = await Get_Captcha("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec", n, requ)
             let captcha;
             if (resu["generated_pass_UUID"]) {
                 captcha = resu["generated_pass_UUID"]
