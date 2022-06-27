@@ -120,8 +120,10 @@ function N_Data(requ) {
 }
 async function REQ_Data(host, sitekey) {
     try {
-        let r = await axios.get(`https://hcaptcha.com/checksiteconfig?host=${host}&sitekey=${sitekey}&sc=1&swa=1`, { headers: headers })
-        r = r.data
+        let dog_key = await dogChecker().catch(console.log);
+        var r = await unirest.get(`https://hcaptcha.com/checksiteconfig?host=${host}&sitekey=${sitekey}&sc=1&swa=1`).proxy(`http://scrapingdog:${dog_key}@proxy.scrapingdog.com:8081`).headers(headers)
+        //let r = await axios.get(`https://hcaptcha.com/checksiteconfig?host=${host}&sitekey=${sitekey}&sc=1&swa=1`, { headers: headers })
+        r = r.body
         if (r["pass"])
             return r["c"];
         else
