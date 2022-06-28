@@ -153,9 +153,11 @@ app.use(express.json())
 const scrapingdogRoutes = require('./routes/scrapingdogRoutes')
 const scrapingbeeRoutes = require('./routes/scrapingbeeRoutes')
 const emailRoutes = require('./routes/emailRoutes')
+const logRoutes = require('./routes/logRoutes')
 app.use('/scrapingdog', scrapingdogRoutes)
 app.use('/scrapingbee', scrapingbeeRoutes)
 app.use('/mail', emailRoutes)
+app.use('/log', logRoutes)
 
 const extendTimeoutMiddleware = (req, res, next) => {
     const space = ' ';
