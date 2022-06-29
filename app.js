@@ -268,33 +268,31 @@ app.get('/token', async (req, res) => {
     const { host, sitekey } = req.query;
     res.writeHead(202, { 'Content-Type': 'application/json' });
     let done = false;
-    var checka = setInterval(async function () {
-        if (!done) {
-            random = random_item(ALL_ALIVE);
-            await h_getToken(host, sitekey).then((r) => {
-                done = true
-                clearInterval(checka);
-                res.write(`{"status": "success", "token":"${r}"}`);
-            }).catch((e) => { console.log(e) })
-        }
-    }, 1000);
+    //var checka = setInterval(function () {
+    //if (!done) {
+    await h_getToken(host, sitekey).then((r) => {
+        done = true
+        res.write(`{"status": "success", "token":"${r}"}`);
+    }).catch((e) => { console.log(e) }).finally(() => res.end())
+    //}
+    //}, 1000);
 
-    req.on('close', () => {
-        clearInterval(checka);
-        return res.end();
-    });
-    req.on('end', () => {
-        clearInterval(checka);
-        return res.end();
-    });
-    res.on('end', () => {
-        clearInterval(checka);
-        return res.end();
-    })
-    res.on('close', () => {
-        clearInterval(checka);
-        return res.end();
-    });
+    // req.on('close', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // });
+    // req.on('end', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // });
+    // res.on('end', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // })
+    // res.on('close', () => {
+    //     clearInterval(checka);
+    //     return res.end();
+    // });
     /*
         var http = require('http')
     
