@@ -268,7 +268,7 @@ app.get('/token', async (req, res) => {
     const { host, sitekey } = req.query;
     res.writeHead(202, { 'Content-Type': 'application/json' });
     let done = false;
-    var checka = setInterval(function () {
+    var checka = setInterval(async function () {
         if (!done) {
             random = random_item(ALL_ALIVE);
             await h_getToken(host, sitekey).then((r) => {
@@ -355,8 +355,7 @@ app.get('/', async (req, res) => {
 
 //mongoose.connect(`${process.env.DBuri}`)
 mongoose
-    //.connect(`${process.env.db_uri}`)
-    .connect(`mongodb+srv://venomancer:Venomancer777@cluster-api.aryf2ul.mongodb.net/apiDB?retryWrites=true&w=majority`)
+    .connect(`${process.env.db_uri}`)
     .then(() => {
         console.log('[SERVER] Database conneted')
         app.listen(port, host, function () {
