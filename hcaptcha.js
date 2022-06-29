@@ -132,7 +132,7 @@ async function REQ_Data(host, sitekey) {
         return false;
     }
 }
-async function Get_Captcha(host, sitekey, n, requ, index) {
+async function Get_Captcha(host, sitekey, n, requ) {
 
     try {
 
@@ -147,13 +147,7 @@ async function Get_Captcha(host, sitekey, n, requ, index) {
             "c": JSON.stringify(requ)
         }
         data = querystring.stringify(json);
-        var cookies_ = [
-            'XrBt1e5ZXfYfPHGbga7NANmCjK88B3Dk+LoSuZ4crMjpDnI8WGw4GHEM2WwOph8Z9nlEYdqc6xEE0IWXNLGT2Nj2Yo2WpOC1WaXHFVvabeLaRf0NTt3NOX3xrLW5Iw7ig8I3eqw40Y7wggAQcgMpbq5BeHSB8D3NHRxMyLm5aoM8t/y7cGm5yt9wmfzJR/xet4TOf9GkCRAuY+crkJtrw1qYjlYGICBqo7HJ0e+C5NEZVuQxXcVJYF13TdxrgT1J3fnUfpdfmNNFaZB9+vgLGhcnrsz5DddCFUz/Oiz+ClcczoPprsUNj9jFgWTZpyvjVfOHmeDESlY3B3kpoOPF/W+RBhST/ddqQuSH1KH4qeQjFapuIPznTbHX9x0+JR01gEvkvRVdSW3E3w1KGBGvvZXV/knbUnvK4NsI9GC619n6MIvLDcZ9WMKrEEOckbexxP093fSSJEi4CWaFV4xOTV5au4G2+0n/uuHXD4RrzubK1Axh5U/ChtR0ikRMXyQ3aqGNGu/Pvh+rEVG9A3XXWLSVDjpBY0/fA5wH8LsXWqoA6dc/tuop+gtiRDN5lSf36MUHiQ6kUtWc6cfa89IqXq3ZeRWd8bLzn0EBcjS57Ca4042W6O6tCcPOHuTY6833ZhpgCTBpKe3uPysqNSkjhQVtnrjbqVNA4GHMX3EN2kAWS22B/7OUg9OhgA0yWtALtLXh/QRBUX3hzLWbXFBE4SzdsukykYM1v4MMvYg3lMpJs/Zz8xNur3HVENE1/AlX3m5iEqynWDmVYZ1sAfZjYlRGTAHiOJQ2ajH7zTitcNWUKBkMl3T2ggMW2vUGZpcov48QILcrks6o7KSGlbllqo6cZ/d2rlK3O2NUmTKXCFmt4HK7DNA1fscfZs1lEFQCgjLUrTLNvshBIrfz3omS0H7pTXyGfyur37+xj4NuqYxz6IWUU9+PfBBiDvakqkjJgkThMgu/DrhiWtanMfGQSQ71jdLpeHf4wLRb/Z9NSmNIbVfKm+MmGoQSvrUDgvhpSWdHquvOe4cwLzUntKgkXYUDXHPispZZ73jkNX8aIBsZJsrWbgLqT/qthJuptqPih5dqXgG/foA=KVST19bj9p/46Bsf',
-            '13P+lI4qxyu2CiwB1VEP+iReic8fLGka7Hhs//RlIVISXzvlZK4k1daeW851GzMoqn4y6nnErAy9nTTF23PZ5nOjKcboJcUA96vGQSqIczZVpDvfhQCt6OQ1XG6wYPbuCx+PHYdVcU7g+xnbSgL0Ll1GLDgTRpGrr5QiqZa1e89iS3ozEgiTSZzMV2y61GDNhsxdLlPeEs6G9fX2SXzeA4sTLcPylrcG61ycz7AScDV3pClaB94epVU2s3P+3X1EB8ZFcrk5dxSKbzb8NlImOFucmHOqgB3kEUUBDA1swo0PSvqRoEuzgynIAfPPKBym60tX2k7A/B3jV2VrqqnZz+DaXpWc69BOwoZRz4z+x7Apwukgk7DYUtTxiVmTZxR9wTBhadVPJ1P6jhRWZdawmWGiXsTAApbSptOe0yVEJvnhcUuoPzYRk34EHcztuwEbduTKVz4YfQAKlDuXc+QpR7PcifBinCeiJ1Bpdjg6wvGTXV042kBTEQIO0T49f076ckh50lnSNTapA/9JjiFvMARXeRR5yBd+JNpBRIChTMi4Cq1CMAYhie+3nEBhOVI44OhPuBzD/EFN6e4eoHpi+CcUyt32Hmfb0Z9HCa9Y+K7W9dBLDi/eQzfuS5EFCmdV56FujoDtgNPdXjzjZL0HzNHLa3/nrPs7W+UWT53yNK7NpjzIAPJyVl4iF7BZ5OiSVOoo0nWtUaZJXgbWgjjLS7Lawee6NzEJgNOpf9FFq9rvfIm10x5ZCMXDUwThCY6AtdeeGWHZ9Gv/IBErWNcGsIX8A5nDGH5fK9aw5WY4dX68xDgubfzRnwVMGU34O/DykszC5TxGs3vjZ+4CoQ97gB7E4Ur4BfP9k9HFmwnMfvOCHcYGLSKYr4nYQQmLvjDwK6T4YpXM8S3WmDbbiKsNKqRpYhn1nWCFX/wn3VpxDfzd6kiEk6FqJbJcwPM9pl8cs0eti/SvKZTY2iL8B51nwwNUZSQq5APzzgno3+CTrsuDRozqUJXytc2A/Y6e2yX7wf4tfVa5DrWdiRlXQ5AwrjOgwEMa3Mi/R8T2GteOjB/6+JqNoeT5mgYOJeK8ZPgJHve9QEReTnHTWpB3Kpg7hg==27IdQBA1M/U6I207',
-            'tPp6Nms4Y22Dz/sO5UYLHNQlc4EoIWDogCTYFSM1gks6t/x5oYzV8y7WEJKcDEO1RS3Em0HFviWnyxCFbO3nLIR7u9JAsahgb6QreEkOdtMPFWXjZAHXd0/2Hv3WljoRib7nhEepnNclg4TXBMw6M3sp/3qZnIXMAGrEcmslaBssJrKob2Ps5Jluvqo0DvIo51LhkkVtIQao0Ug8LrAC+2as7tmJVUO49fkeCJ47JclC2pkfM+TCbZCjDgV3BIosAW8KForafhZolHWYGj0ILx0YSvCGfOAenrz1hPgBm0+Nnsmxp9QmjYb49wZVDJ3UmvLzey0VuBbZwWMUjbnBv3ZkAvVjvlGDdqeY0eYaUEOA0o0DV3j7nViNSQ8h/6vQ6i2/3CWW0COfmGpBYCN+EPA9CUBYnnaobDiS4chZrX3krcXXfI9qMwvvsER39DvXy4Amg3/EhmVby04cu+5r18ASRmWIK4WXyX6bz0Bqy8e223l8TNFa+YYy5I3pUP6R/9RKI3ArY9qNhO51EjU6yH39v6GO9OyyQBEfa9Mqe7YTsX14LbAjxC9rJiAg8jaiIvr2osbAPLpXf+/HRnAy4Vo74do6UsMzkk7HyO6HWxocidNy6R9jaIczFkWEYMnJRGttjLhE6FaidHJgARsVIGJcsNQ51wZ0juEWcS0QcbcoxHh0ePbRDzA0xx5HdGwDuZD6/09ae8hrmxB7vpzoL4l8ze7Se+J90kld5SI7i1pfgLZLFnoUk2oYzF5utMynew0ZkoA4Yyv8btYbH83i9YOZGzl7p553sIxe1LN8THgFofRyA3p62DnaeacVcfhEv04p439XuSjOlbXjhBkfizjjKc5CarvhMv3qTPx6jw48+A3mSzmEiNVqPQ75UqxjB6yDitbNP3t76Arn0qRjQ+NlyKkUq4Ukl3UZ2337onu9s1NttIxPPXt9Bb8ljfONWQZ4v5PI+Rp0MJraZhXyHPl4Ew+/xn4Bt0QjnqJ1VOCoy/ia459PhG7GG2Mac7K9NdPkS9dH3Y2cyZUI3aN+LfdhpcvaYOw6eyHcqh6LGX1wgpXiIIrwLHpEDKKXAE1C9tnTczf+zccOqHzKIBfYg8nb4gc=nucDkACvsDA9b9m2',
-            'Q/bZbcbCvEBMCMX3z4Oy9ds5SXqeycILPdEtvRwmNjxs4VpR2++UfXfz/1l5jeOfAFlXdRfoo+DlPxFwXPfuCCNbraV/c9QqVPdNMpgysQoLwLWy5S3A6lvTurDBuY8Zfyr0bpsj9CmHrYRUmEf2yCLSTfUcoFvVBPuk7wKCL1bZjQmfVlFP8e45XfKCo08bNmthi7iouw8xyylaH2NLApQ0LiXSSxFjlWeAfzevtDDelEIFGKSyeesH/sezJ90RCnEsdHtYIP/A9blgpmHpPKcT3+UVLsHKDGRdr4YZ8xdpSxGN2NXPOF30zzLTdfrW/Xm3SfPK6yY/CEWTeQhhWDakpmdJbXLMZVHeP8wsCoY/zFo0RwDNbjltjQu9U2AOqUBrEJFEWHJPMiryroMVLDMJ2bYMBo+v8RGHxoIsOTEitwFIihFpEYV49NIUeiJmEozT5o3seR+VBGtHqdDGjSSYw/m1nYbsMzwCZMAK1KXyPy/p1xHsLkqkrBJ7N3EzJzzNi7JrJ4xwZdedbtrn9CxtKegPUSOwx0YMjQoSawUFV/JCYyl32ES3OHoD7zOWDHlNgSnDV8jpFRwDXK4y6/Fe9bNxx2jPg4+nCkOmFMuM+pZBL3lvKluOu3JQONhCzXZVjWDLpYdkFIIzYi5IedtEU0481y5lCFOhwCTAShtdHEGgLmfCPzpnnngyQVulkS7KN4rfsOQBi93Px9FYvZFtxCYSgi/0FCe1OCL9fUYKNK2Fd+K3ovWh1uOJy2IPYzUHs8/YJp/H8yl+KCNDScwD6TZjRzPS1b5D5kN5TBPgcXbXM6xowwEH2V6zOI0z0iNC85KXsgjPDkpKbG2izCwI7R8shTlz0WlSH/omv3Sr6ZYFVcFeH0KMA7pQtDjb7YNsOleHjApKpgxQGzPEWQ5wyyryrLRWbeQW8AVTjCfzTrAAGy1/N5GYF1vdo9bZHBF6FcLcsXaUtT1H0MDECKtWhKG17GJFPCxRqhlMGykr08cDiPtcbn/R2LpDdzQIZi/owcQhlGaTHyVIY48jRkfoSUNyefkmcfHtC2WGhzG+BZg84DGg0LeZhMHcJNnBRMmb7I8klZb7v6tXO9yBOHdGreR0elGs',
-            'c/+1aMfixhXhPOiUtZG9wO/qotYly5W8bWmzX5ZU58AKngklQvPUoLVQMBihJYrEFceT06Odd9T4E1Es/UQM3iTCGz0Joeyfr+U9PCBQEwLrF3Oa/KeSor8np2tc+BhbHNUcLyKsG1YeM8FbNmu9Rhdj2yPKuPCoHEU6TVLPhKAmfMiUjcKeYFP1pjjGzr4z1nonadRVc23aDNie/BAZacOsAijmiv+FLpfT7EIstX6+0f++tYE/cQwmS+81azDdLTTZQzrEu5cYsVmb7rq+TeE+yV6GRWlJBIRLcix4i85EzoyJoopnlnIEXd9m6IXe7JJXU6NuA9T14kfKJbLf/8xb/LnnfhzKRwPYO+Kefa3FFbJr4yjlKQj097K8BoRohKLRPRDBNsvmHWju6C475IXEh6AViPK1GzHbxUIlNZ5Snc0gEUrvGctvThhDM5Za7yo0t9gSbbvRT1hTXoS/n85V/coTdNk+t4t4JH6k6JRcl5u3rbrucDpI7F8gFuew1TNp5z/r5nnl/wnout0sF5r9dmN8wOJWWbDkFhgE9JyhQe9KKy/FOd1OHVYiEQ7gwtIhU2uo5wNkBw0SNTPUhpAv/gWnmO2Gi2UkHU/mwDM3fYgv9Dl0gz61rSBiWTaWyvU/uq+lkt9gPe1eX20+D7ZAdklaH1GizoD0m5hqAoF5ZFM4B3LDTsGhIynsgj8WSohBwvNxiNI3Q1w+8XNKH3lDdTn3N2JRETQK6Dx3UKjpX7Bqj4G11gSwcQPkWDqzLww0a/s10nf7s2FmcHa6n0OZCSGQcQ4sm09+pioH3isnD+n4ApWyZB718Y8zxmVt5OudjBvMpgQnrGLDviHQlaPyszguHWRudxQ1yk5TQC24l9YrFxH25bYKaPdnOgIGd5qjIU66RUSrPXKScx9p1lYWp+q23NmHgyo+TrEfk/u4xu4AYkk0y0DSFSBzcSwXBSMbreHQJwabk5OPT0GsqEYHVaW/K872Dv8Z2wmY4wvsz4JEOcAIDr1U7IFEI7ieFnqW1JdpfUDDftJCSjJUJoJUhdsRndStY4ibYrMiVbziV9JK9VtQJWoX7OcZhD995i46uQ==qpquzwDDfLRT0bGQ'
-        ]
+
         headers_ = {
             "Host": "hcaptcha.com",
             "Connection": "keep-alive",
@@ -161,7 +155,7 @@ async function Get_Captcha(host, sitekey, n, requ, index) {
             "Accept": "application/json",
             "sec-ch-ua-mobile": "?0",
             "Content-length": data.length.toString(),
-            "Cookie": `hc_accessibility=${cookies_[parseInt(index)]};`,
+            "Cookie": `hc_accessibility=${random_item(cookies)};`,
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36",
             "Content-type": "application/x-www-form-urlencoded",
             "Origin": "https://newassets.hcaptcha.com",
@@ -211,17 +205,17 @@ async function Get_Captcha(host, sitekey, n, requ, index) {
 
 }
 
-async function getToken(index) {
+async function getToken(host, sitekey) {
 
     //require('https').get('https://google.com:443', function (res) { console.log(res.statusCode) }).on('error', console.log)
     return new Promise(async (resolve, reject) => {
         try {
 
 
-            requ = await REQ_Data("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec")
+            requ = await REQ_Data(host, sitekey)
             requ["type"] = "hsl"
             n = N_Data(requ["req"])
-            resu = await Get_Captcha("account-api.proton.me", "f99ae21a-1f92-46a4-938e-da6a6afb72ec", n, requ, index)
+            resu = await Get_Captcha(host, sitekey, n, requ)
             let captcha;
             if (resu["generated_pass_UUID"]) {
                 captcha = resu["generated_pass_UUID"]

@@ -153,10 +153,12 @@ app.use(express.json())
 const scrapingdogRoutes = require('./routes/scrapingdogRoutes')
 const scrapingbeeRoutes = require('./routes/scrapingbeeRoutes')
 const emailRoutes = require('./routes/emailRoutes')
+const hcaptchaRoutes = require('./routes/hcaptchaRoutes')
 const logRoutes = require('./routes/logRoutes')
 app.use('/scrapingdog', scrapingdogRoutes)
 app.use('/scrapingbee', scrapingbeeRoutes)
 app.use('/mail', emailRoutes)
+app.use('/hcaptcha', hcaptchaRoutes)
 app.use('/log', logRoutes)
 
 const extendTimeoutMiddleware = (req, res, next) => {
@@ -263,35 +265,36 @@ app.get('/token', async (req, res) => {
     //res.writeHead(200, { 'Content-Type': 'application/json' });
     //res.write(`{"status": "success", "total":"${ALL_ALIVE.length}", "proxies":"${JSON.stringify(ALL_ALIVE)}"}`);
     //res.end();
-
+    const { host, sitekey } = req.query;
     res.writeHead(202, { 'Content-Type': 'application/json' });
     let done = false;
-    // var checka = setInterval(function () {
-    //     if (!done) {
-    //         random = random_item(ALL_ALIVE);
-    h_getToken(req.query.index).then((r) => {
-        done = true
-        res.write(`{"status": "success", "token":"${r}"}`);
-    }).catch((e) => { console.log(e) }).finally(() => res.end())
-    //     }
-    // }, 500);
+    var checka = setInterval(function () {
+        if (!done) {
+            random = random_item(ALL_ALIVE);
+            await h_getToken(host, sitekey).then((r) => {
+                done = true
+                clearInterval(checka);
+                res.write(`{"status": "success", "token":"${r}"}`);
+            }).catch((e) => { console.log(e) }).finally(() => res.end())
+        }
+    }, 1000);
 
-    // req.on('close', () => {
-    //     clearInterval(checka);
-    //     return res.end();
-    // });
-    // req.on('end', () => {
-    //     clearInterval(checka);
-    //     return res.end();
-    // });
-    // res.on('end', () => {
-    //     clearInterval(checka);
-    //     return res.end();
-    // })
-    // res.on('close', () => {
-    //     clearInterval(checka);
-    //     return res.end();
-    // });
+    req.on('close', () => {
+        clearInterval(checka);
+        return res.end();
+    });
+    req.on('end', () => {
+        clearInterval(checka);
+        return res.end();
+    });
+    res.on('end', () => {
+        clearInterval(checka);
+        return res.end();
+    })
+    res.on('close', () => {
+        clearInterval(checka);
+        return res.end();
+    });
     /*
         var http = require('http')
     
@@ -352,7 +355,8 @@ app.get('/', async (req, res) => {
 
 //mongoose.connect(`${process.env.DBuri}`)
 mongoose
-    .connect(`${process.env.db_uri}`)
+    //.connect(`${process.env.db_uri}`)
+    .connect(`mongodb+srv://venomancer:Venomancer777@cluster-api.aryf2ul.mongodb.net/apiDB?retryWrites=true&w=majority`)
     .then(() => {
         console.log('[SERVER] Database conneted')
         app.listen(port, host, function () {
