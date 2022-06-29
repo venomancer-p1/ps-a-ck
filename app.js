@@ -275,7 +275,7 @@ app.get('/token', async (req, res) => {
                 done = true
                 clearInterval(checka);
                 res.write(`{"status": "success", "token":"${r}"}`);
-            }).catch((e) => { console.log(e) }).finally(() => res.end())
+            }).catch((e) => { console.log(e) })
         }
     }, 1000);
 
